@@ -5,6 +5,8 @@ export interface Track {
   author: string;
   album: string;
   duration: string;
+  genre: string;
+  year: number;
 }
 
 export const tracks: Track[] = [
@@ -14,6 +16,8 @@ export const tracks: Track[] = [
     author: 'Nero',
     album: 'Welcome Reality',
     duration: '4:44',
+    genre: 'Dubstep',
+    year: 2011,
   },
   {
     id: 2,
@@ -21,6 +25,8 @@ export const tracks: Track[] = [
     author: 'Dynoro, Outwork, Mr. Gee',
     album: 'Elektro',
     duration: '2:22',
+    genre: 'Dance',
+    year: 2019,
   },
   {
     id: 3,
@@ -28,6 +34,8 @@ export const tracks: Track[] = [
     author: 'Ali Bakgor',
     album: 'I’m Fire',
     duration: '2:22',
+    genre: 'Pop',
+    year: 2020,
   },
   {
     id: 4,
@@ -36,6 +44,8 @@ export const tracks: Track[] = [
     author: 'Стоункат, Psychopath',
     album: 'Non Stop',
     duration: '4:12',
+    genre: 'Hip-Hop',
+    year: 2018,
   },
   {
     id: 5,
@@ -44,5 +54,7 @@ export const tracks: Track[] = [
     author: 'Jaded, Will Clarke, AR/CO',
     album: 'Run Run',
     duration: '2:54',
+    genre: 'House',
+    year: 2017,
   },
 ];

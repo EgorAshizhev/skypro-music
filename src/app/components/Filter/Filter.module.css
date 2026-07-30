@@ -13,6 +13,14 @@
   margin-right: 15px;
 }
 
+.filter__wrapper {
+  position: relative;
+}
+
+.filter__wrapper:not(:last-child) {
+  margin-right: 10px;
+}
+
 .filter__button {
   font-style: normal;
   font-weight: 400;
@@ -21,8 +29,66 @@
   border: 1px solid #ffffff;
   border-radius: 60px;
   padding: 6px 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.filter__button:not(:last-child) {
-  margin-right: 10px;
+.active {
+  border-color: #ad61ff;
+  color: #ad61ff;
+}
+
+.active::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #ad61ff;
+}
+
+.filter__list {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 10;
+  list-style: none;
+  margin: 0;
+  color: white;
+  background-color: #2e2e2e;
+  border-radius: 6px;
+  padding: 16px;
+  display: flex;
+  gap: 16px;
+  height: max-content;
+  max-height: 237px;
+  overflow-y: auto;
+  flex-direction: column;
+  width: max-content;
+  max-width: 248px;
+}
+
+.filter__list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.filter__list::-webkit-scrollbar-track {
+  background-color: rgba(75, 73, 73, 1);
+}
+
+.filter__list::-webkit-scrollbar-thumb {
+  background-color: white;
+}
+
+.filter__listItem {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.filter__listItem:hover {
+  color: #d9b6ff;
 }
