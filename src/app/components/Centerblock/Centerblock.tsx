@@ -9,7 +9,10 @@ export default function Centerblock() {
       <Search />
       <h2 className={styles.centerblock__h2}>Треки</h2>
       <Filter />
-      <Playlist />
+      {/* Добавляем обертку для Playlist */}
+      <div className={styles.centerblock__playlistWrapper}>
+        <Playlist />
+      </div>
     </div>
   );
 }
