@@ -1,7 +1,13 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
+import cn from 'classnames';
 import styles from './Navigation.module.css';
 
 export default function Navigation() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
     <nav className={styles.main__nav}>
       <div className={styles.nav__logo}>
@@ -16,12 +22,22 @@ export default function Navigation() {
           />
         </Link>
       </div>
-      <div className={styles.nav__burger}>
+      <button
+        type="button"
+        className={styles.nav__burger}
+        onClick={() => setIsMenuOpen((prev) => !prev)}
+        aria-label="Открыть/закрыть меню"
+        aria-expanded={isMenuOpen}
+      >
         <span className={styles.burger__line}></span>
         <span className={styles.burger__line}></span>
         <span className={styles.burger__line}></span>
-      </div>
-      <div className={styles.nav__menu}>
+      </button>
+      <div
+        className={cn(styles.nav__menu, {
+          [styles.nav__menu_hidden]: !isMenuOpen,
+        })}
+      >
         <ul className={styles.menu__list}>
           <li className={styles.menu__item}>
             <Link href="/" className={styles.menu__link}>

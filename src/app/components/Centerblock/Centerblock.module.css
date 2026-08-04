@@ -2,6 +2,11 @@
   width: auto;
   flex-grow: 3;
   padding: 20px 40px 20px 111px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
 }
 
 .centerblock__h2 {
@@ -11,4 +16,67 @@
   line-height: 72px;
   letter-spacing: -0.8px;
   margin-bottom: 45px;
+  flex-shrink: 0;
+}
+
+/* Обертка для Playlist со скроллом */
+.centerblock__playlistWrapper {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Стилизуем дочерний Playlist через обертку */
+.centerblock__playlistWrapper > * {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Находим и стилизуем контейнер с треками внутри Playlist */
+.centerblock__playlistWrapper :global(.content__playlist) {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto !important;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.centerblock__playlistWrapper :global(.content__playlist::-webkit-scrollbar) {
+  width: 0 !important;
+  background: transparent !important;
+  display: none !important;
+}
+
+/* При зуме от 110% и выше */
+@media screen and (min-width: 768px) and (max-width: 1919px) {
+  .centerblock {
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  .centerblock__playlistWrapper :global(.content__playlist) {
+    overflow-y: auto !important;
+  }
+}
+
+/* Адаптация для мобильных устройств */
+@media (max-width: 768px) {
+  .centerblock {
+    padding: 20px;
+    height: auto;
+    overflow: visible;
+  }
+  
+  .centerblock__playlistWrapper {
+    overflow: visible;
+  }
+  
+  .centerblock__playlistWrapper :global(.content__playlist) {
+    overflow-y: visible !important;
+    max-height: none;
+  }
 }
