@@ -1,9 +1,20 @@
+'use client';
+
+import { useEffect } from 'react';
 import cn from 'classnames';
 import styles from './Playlist.module.css';
 import TrackItem from '@/app/components/TrackItem/TrackItem';
 import { tracks } from '@/data/tracks';
+import { useAppDispatch } from '@/store/hooks';
+import { setPlaylist } from '@/store/features/playerSlice';
 
 export default function Playlist() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(setPlaylist(tracks));
+  }, [dispatch]);
+
   return (
     <div className={styles.centerblock__content}>
       <div className={styles.content__title}>
