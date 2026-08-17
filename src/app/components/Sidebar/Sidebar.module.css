@@ -21,11 +21,16 @@
 }
 
 .sidebar__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 43px;
   height: 43px;
   background-color: #313131;
+  border: none;
   border-radius: 50%;
   cursor: pointer;
+  padding: 0;
 }
 
 .sidebar__block {

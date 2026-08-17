@@ -1,0 +1,60 @@
+.wrapper {
+  width: 100%;
+  min-height: 100%;
+  overflow: hidden;
+  background-color: #181818;
+}
+
+.container {
+  display: flex;
+  max-width: 1920px;
+  height: 100vh;
+  margin: 0 auto;
+  position: relative;
+  background-color: #181818;
+}
+
+.main {
+  flex: 1 1 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  min-height: 0;
+  height: 100%;
+}
+
+/* ... ваш существующий код ... */
+
+/* Добавьте этот медиазапрос в конец файла */
+@media screen and (min-width: 768px) and (max-width: 1919px) {
+  /* При зуме страницы от 110% и выше */
+  .container {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .main {
+    height: 100%;
+    overflow: hidden;
+  }
+}
+
+@media screen and (min-width: 1920px) {
+  .container {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .main {
+    height: 100%;
+    overflow: hidden;
+  }
+}
+
+@media screen and (max-width: 1919px) {
+
+  .main {
+    height: 100%;
+    overflow: hidden;
+  }
+}

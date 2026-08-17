@@ -3,11 +3,23 @@
 import { useState } from 'react';
 import cn from 'classnames';
 import styles from './Filter.module.css';
-import { tracks } from '@/data/tracks';
+import type { Track } from '@/data/tracks';
 
-type FilterName = 'author' | 'year' | 'genre';
+export interface SelectedFilters {
+  author: string[];
+  year: number[];
+  genre: string[];
+}
 
-function getUniqueAuthors(): string[] {
+interface FilterProps {
+  tracks: Track[];
+  selected: SelectedFilters;
+  onChange: (filters: SelectedFilters) => void;
+}
+
+type FilterName = keyof SelectedFilters;
+
+function getUniqueAuthors(tracks: Track[]): string[] {
   const authors = new Set<string>();
   tracks.forEach((track) => {
     track.author.split(',').forEach((name) => authors.add(name.trim()));
@@ -15,59 +27,76 @@ function getUniqueAuthors(): string[] {
   return Array.from(authors);
 }
 
-function getUniqueYears(): number[] {
+function getUniqueYears(tracks: Track[]): number[] {
   const years = new Set<number>();
   tracks.forEach((track) => years.add(track.year));
   return Array.from(years).sort((a, b) => b - a);
 }
 
-function getUniqueGenres(): string[] {
+function getUniqueGenres(tracks: Track[]): string[] {
   const genres = new Set<string>();
   tracks.forEach((track) => genres.add(track.genre));
   return Array.from(genres);
 }
 
-const filters: {
-  name: FilterName;
-  label: string;
-  items: (string | number)[];
-}[] = [
-  { name: 'author', label: 'исполнителю', items: getUniqueAuthors() },
-  { name: 'year', label: 'году выпуска', items: getUniqueYears() },
-  { name: 'genre', label: 'жанру', items: getUniqueGenres() },
-];
+export default function Filter({ tracks, selected, onChange }: FilterProps) {
+  const [openFilter, setOpenFilter] = useState<FilterName | null>(null);
 
-export default function Filter() {
-  const [activeFilter, setActiveFilter] = useState<FilterName | null>(null);
+  const filters: { name: FilterName; label: string; items: (string | number)[] }[] = [
+    { name: 'author', label: 'исполнителю', items: getUniqueAuthors(tracks) },
+    { name: 'year', label: 'году выпуска', items: getUniqueYears(tracks) },
+    { name: 'genre', label: 'жанру', items: getUniqueGenres(tracks) },
+  ];
 
   function handleFilterClick(name: FilterName) {
-    setActiveFilter((prev) => (prev === name ? null : name));
+    setOpenFilter((prev) => (prev === name ? null : name));
+  }
+
+  function toggleValue(name: FilterName, value: string | number) {
+    const current = selected[name] as (string | number)[];
+    const next = current.includes(value)
+      ? current.filter((v) => v !== value)
+      : [...current, value];
+
+    onChange({ ...selected, [name]: next });
   }
 
   return (
     <div className={styles.centerblock__filter}>
       <div className={styles.filter__title}>Искать по:</div>
-      {filters.map((filter) => (
-        <div key={filter.name} className={styles.filter__wrapper}>
-          <div
-            className={cn(styles.filter__button, 'btn-text', {
-              [styles.active]: activeFilter === filter.name,
-            })}
-            onClick={() => handleFilterClick(filter.name)}
-          >
-            {filter.label}
+      {filters.map((filter) => {
+        const activeCount = selected[filter.name].length;
+        return (
+          <div key={filter.name} className={styles.filter__wrapper}>
+            <div
+              className={cn(styles.filter__button, 'btn-text', {
+                [styles.active]: openFilter === filter.name || activeCount > 0,
+              })}
+              onClick={() => handleFilterClick(filter.name)}
+            >
+              {filter.label}
+              {activeCount > 0 ? ` (${activeCount})` : ''}
+            </div>
+            {openFilter === filter.name && (
+              <ul className={styles.filter__list}>
+                {filter.items.map((item) => (
+                  <li
+                    key={item}
+                    className={cn(styles.filter__listItem, {
+                      [styles.filter__listItem_active]: (
+                        selected[filter.name] as (string | number)[]
+                      ).includes(item),
+                    })}
+                    onClick={() => toggleValue(filter.name, item)}
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
-          {activeFilter === filter.name && (
-            <ul className={styles.filter__list}>
-              {filter.items.map((item) => (
-                <li key={item} className={styles.filter__listItem}>
-                  {item}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
