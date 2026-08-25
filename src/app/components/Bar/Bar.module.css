@@ -6,6 +6,18 @@
   background: rgba(28, 28, 28, 0.5);
 }
 
+@media screen and (max-width: 599px) {
+  /* На мобильных .container больше не ограничен высотой 100vh (см.
+     layout.module.css), поэтому position: absolute больше не привязывает
+     плеер к низу видимой области — используем fixed, чтобы плеер всегда
+     оставался внизу экрана и не наезжал на блок пользователя в сайдбаре. */
+  .bar {
+    position: fixed;
+    background: #1c1c1c;
+    z-index: 10;
+  }
+}
+
 .bar__content {
   display: flex;
   flex-direction: column;

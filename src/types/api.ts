@@ -13,8 +13,8 @@ export interface RawTrack {
 
 export interface RawSelection {
   _id: number;
-  name: string;
-  items: number[];
+  name?: string;
+  items: Array<number | RawTrack | { _id: number } | { id: number }>;
 }
 
 export interface ApiUser {

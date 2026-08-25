@@ -50,10 +50,13 @@ export const fetchSelectionTracks = createAsyncThunk<
   { rejectValue: string }
 >('selections/fetchTracks', async (id, { rejectWithValue }) => {
   try {
-    const [selection, allTracks] = await Promise.all([
-      getSelectionById(id),
-      getAllTracks(),
-    ]);
+    const selection = await getSelectionById(id);
+
+    if (selection.tracks.length > 0) {
+      return { id, name: selection.name, tracks: selection.tracks };
+    }
+
+    const allTracks = await getAllTracks();
     const idsInSelection = new Set(selection.trackIds);
     const tracks = allTracks.filter((track) => idsInSelection.has(track.id));
     return { id, name: selection.name, tracks };
@@ -85,6 +88,9 @@ const selectionsSlice = createSlice({
       .addCase(fetchSelectionTracks.pending, (state) => {
         state.currentStatus = 'loading';
         state.currentError = null;
+        state.currentId = null;
+        state.currentName = null;
+        state.currentTracks = [];
       })
       .addCase(fetchSelectionTracks.fulfilled, (state, action) => {
         state.currentStatus = 'succeeded';

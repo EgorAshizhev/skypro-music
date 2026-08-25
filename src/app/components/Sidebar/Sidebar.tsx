@@ -22,6 +22,9 @@ export default function Sidebar() {
   const user = useAppSelector((state) => state.auth.user);
   const { list, listStatus } = useAppSelector((state) => state.selections);
 
+  // Берём первые 3 подборки (или сколько есть) без фильтрации
+  const displayedSelections = list.slice(0, 3);
+
   useEffect(() => {
     if (listStatus === 'idle') {
       dispatch(fetchSelections());
@@ -45,26 +48,33 @@ export default function Sidebar() {
           onClick={handleLogout}
           aria-label="Выйти"
         >
-          <svg>
+          <svg className={styles.sidebar__iconSvg}>
             <use xlinkHref="/img/icon/sprite.svg#logout"></use>
           </svg>
         </button>
       </div>
       <div className={styles.sidebar__block}>
         {listStatus === 'loading' && <Loader text="Загрузка подборок" />}
-        {listStatus === 'succeeded' && (
+        {listStatus === 'failed' && (
+          <p className={styles.sidebar__message}>
+            Не удалось загрузить подборки. Попробуйте позже
+          </p>
+        )}
+        {listStatus === 'succeeded' && displayedSelections.length === 0 && (
+          <p className={styles.sidebar__message}>Подборки не найдены</p>
+        )}
+        {listStatus === 'succeeded' && displayedSelections.length > 0 && (
           <div className={styles.sidebar__list}>
-            {list.map((selection, index) => (
+            {displayedSelections.map((selection, index) => (
               <div key={selection.id} className={styles.sidebar__item}>
                 <Link
                   className={styles.sidebar__link}
                   href={`/selection/${selection.id}`}
                 >
-                  {/*TODO: img -> Image*/}
                   <img
                     className={styles.sidebar__img}
                     src={fallbackImages[index % fallbackImages.length]}
-                    alt={selection.name}
+                    alt={selection.name ?? 'Подборка'}
                     width={250}
                     height={170}
                   />
