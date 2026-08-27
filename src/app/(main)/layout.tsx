@@ -1,16 +1,19 @@
-import styles from './page.module.css';
+import styles from './layout.module.css';
 import Navigation from '@/app/components/Navigation/Navigation';
-import Centerblock from '@/app/components/Centerblock/Centerblock';
 import Sidebar from '@/app/components/Sidebar/Sidebar';
 import Bar from '@/app/components/Bar/Bar';
 
-export default function MainPage() {
+export default function MainLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>
         <main className={styles.main}>
           <Navigation />
-          <Centerblock />
+          {children}
           <Sidebar />
         </main>
         <Bar />

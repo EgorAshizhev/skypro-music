@@ -95,3 +95,31 @@
   text-align: right;
   color: #696969;
 }
+
+.track__titleImage {
+  cursor: pointer;
+}
+
+.track__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #ad61ff;
+  display: block;
+}
+
+.track__dot_playing {
+  animation: dotPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.55;
+  }
+}

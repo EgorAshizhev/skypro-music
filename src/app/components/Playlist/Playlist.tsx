@@ -1,9 +1,15 @@
+'use client';
+
 import cn from 'classnames';
 import styles from './Playlist.module.css';
 import TrackItem from '@/app/components/TrackItem/TrackItem';
-import { tracks } from '@/data/tracks';
+import type { Track } from '@/data/tracks';
 
-export default function Playlist() {
+interface PlaylistProps {
+  tracks: Track[];
+}
+
+export default function Playlist({ tracks }: PlaylistProps) {
   return (
     <div className={styles.centerblock__content}>
       <div className={styles.content__title}>
@@ -23,9 +29,11 @@ export default function Playlist() {
         </div>
       </div>
       <div className={styles.content__playlist}>
-        {tracks.map((track) => (
-          <TrackItem key={track.id} track={track} />
-        ))}
+        {tracks.length === 0 ? (
+          <div className={styles.emptyState}>Треки не найдены</div>
+        ) : (
+          tracks.map((track) => <TrackItem key={track.id} track={track} />)
+        )}
       </div>
     </div>
   );

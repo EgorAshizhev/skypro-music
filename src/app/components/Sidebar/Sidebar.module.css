@@ -1,5 +1,8 @@
-.main__sidebar {
-  max-width: 418px;
+ .main__sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
   padding: 20px 90px 20px 78px;
 }
 
@@ -21,11 +24,23 @@
 }
 
 .sidebar__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 43px;
   height: 43px;
   background-color: #313131;
+  border: none;
   border-radius: 50%;
   cursor: pointer;
+  padding: 0;
+}
+
+.sidebar__iconSvg {
+  width: 41px;
+  height: 41px;
+  fill: transparent;
+  stroke: #ffffff;
 }
 
 .sidebar__block {
@@ -59,4 +74,40 @@
 .sidebar__img {
   width: 100%;
   height: auto;
+}
+
+.sidebar__message {
+  color: #696969;
+  font-size: 14px;
+  text-align: center;
+  padding: 0 10px;
+}
+
+@media screen and (max-width: 1199px) {
+  .main__sidebar {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+@media screen and (max-width: 599px) {
+  .main__sidebar {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .sidebar__block {
+    padding-top: 40px;
+  }
+
+  .sidebar__list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .sidebar__item:not(:last-child) {
+    margin-bottom: 0;
+  }
 }

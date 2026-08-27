@@ -7,54 +7,146 @@ export interface Track {
   duration: string;
   genre: string;
   year: number;
+  trackFile: string;
 }
 
-export const tracks: Track[] = [
+interface RawTrack {
+  _id: number;
+  name: string;
+  author: string;
+  release_date: string;
+  genre: string[];
+  duration_in_seconds: number;
+  album: string;
+  track_file: string;
+}
+
+const rawTracks: RawTrack[] = [
   {
-    id: 1,
-    title: 'Guilt',
-    author: 'Nero',
-    album: 'Welcome Reality',
-    duration: '4:44',
-    genre: 'Dubstep',
-    year: 2011,
+    _id: 8,
+    name: 'Chase',
+    author: 'Alexander Nakarada',
+    release_date: '2005-06-11',
+    genre: ['Классическая музыка'],
+    duration_in_seconds: 205,
+    album: 'Chase',
+    track_file:
+      'https://webdev-music-003b5b991590.herokuapp.com/media/music_files/Alexander_Nakarada_-_Chase.mp3',
   },
   {
-    id: 2,
-    title: 'Elektro',
-    author: 'Dynoro, Outwork, Mr. Gee',
-    album: 'Elektro',
-    duration: '2:22',
-    genre: 'Dance',
-    year: 2019,
+    _id: 9,
+    name: 'Open Sea epic',
+    author: 'Frank Schroter',
+    release_date: '2019-06-12',
+    genre: ['Классическая музыка'],
+    duration_in_seconds: 165,
+    album: 'Open Sea epic',
+    track_file:
+      'https://webdev-music-003b5b991590.herokuapp.com/media/music_files/Frank_Schroter_-_Open_Sea_epic.mp3',
   },
   {
-    id: 3,
-    title: 'I’m Fire',
-    author: 'Ali Bakgor',
-    album: 'I’m Fire',
-    duration: '2:22',
-    genre: 'Pop',
-    year: 2020,
+    _id: 10,
+    name: 'Sneaky Snitch',
+    author: 'Kevin Macleod',
+    release_date: '2022-04-16',
+    genre: ['Классическая музыка'],
+    duration_in_seconds: 305,
+    album: 'Sneaky Snitch',
+    track_file:
+      'https://webdev-music-003b5b991590.herokuapp.com/media/music_files/Kevin_Macleod_-_Sneaky_Snitch.mp3',
   },
   {
-    id: 4,
-    title: 'Non Stop',
-    subtitle: '(Remix)',
-    author: 'Стоункат, Psychopath',
-    album: 'Non Stop',
-    duration: '4:12',
-    genre: 'Hip-Hop',
-    year: 2018,
+    _id: 11,
+    name: 'Secret Garden',
+    author: 'Mixkit',
+    release_date: '1972-06-06',
+    genre: ['Классическая музыка'],
+    duration_in_seconds: 324,
+    album: 'Secret Garden',
+    track_file:
+      'https://webdev-music-003b5b991590.herokuapp.com/media/music_files/Mixkit_-_Secret_Garden.mp3',
   },
   {
-    id: 5,
-    title: 'Run Run',
-    subtitle: '(feat. AR/CO)',
-    author: 'Jaded, Will Clarke, AR/CO',
-    album: 'Run Run',
-    duration: '2:54',
-    genre: 'House',
-    year: 2017,
+    _id: 12,
+    name: 'A journey of successfull winners',
+    author: '-',
+    release_date: '1985-02-02',
+    genre: ['Классическая музыка'],
+    duration_in_seconds: 255,
+    album: '-',
+    track_file:
+      'https://webdev-music-003b5b991590.herokuapp.com/media/music_files/Musiclfiles_-_A_Journey_For_Successful_Winners.mp3',
+  },
+  {
+    _id: 13,
+    name: 'Epic Heroic Conquest',
+    author: '-',
+    release_date: '1962-01-15',
+    genre: ['Классическая музыка'],
+    duration_in_seconds: 200,
+    album: 'Epic Heroic Conquest',
+    track_file:
+      'https://webdev-music-003b5b991590.herokuapp.com/media/music_files/Musiclfiles_-_Epic_Heroic_Conquest.mp3',
+  },
+  {
+    _id: 14,
+    name: 'The March OF The Final Battle',
+    author: '-',
+    release_date: '2011-11-02',
+    genre: ['Классическая музыка'],
+    duration_in_seconds: 206,
+    album: 'The March OF The Final Battle',
+    track_file:
+      'https://webdev-music-003b5b991590.herokuapp.com/media/music_files/musiclfiles_-_The_March_Of_The_Final_Battle.mp3',
+  },
+  {
+    _id: 15,
+    name: 'True Summer',
+    author: '-',
+    release_date: '2012-06-01',
+    genre: ['Классическая музыка'],
+    duration_in_seconds: 253,
+    album: 'True Summer',
+    track_file:
+      'https://webdev-music-003b5b991590.herokuapp.com/media/music_files/Musiclfiles_-_True_Summer.mp3',
+  },
+  {
+    _id: 16,
+    name: 'Background Sensible',
+    author: 'Waltz Piano',
+    release_date: '2003-05-12',
+    genre: ['Классическая музыка'],
+    duration_in_seconds: 135,
+    album: 'Background Sensible',
+    track_file:
+      'https://webdev-music-003b5b991590.herokuapp.com/media/music_files/Waltz_Piano_-_Background_Sensible.mp3',
+  },
+  {
+    _id: 17,
+    name: 'Cinematic',
+    author: 'Winniethemoog',
+    release_date: '2004-10-01',
+    genre: ['Классическая музыка'],
+    duration_in_seconds: 206,
+    album: 'Cinematic',
+    track_file:
+      'https://webdev-music-003b5b991590.herokuapp.com/media/music_files/Winniethemoog_-_Action_Sport_Breakbeat.mp3',
   },
 ];
+
+function formatDuration(totalSeconds: number): string {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+}
+
+export const tracks: Track[] = rawTracks.map((raw) => ({
+  id: raw._id,
+  title: raw.name,
+  author: raw.author,
+  album: raw.album,
+  duration: formatDuration(raw.duration_in_seconds),
+  genre: raw.genre[0] ?? '',
+  year: new Date(raw.release_date).getFullYear(),
+  trackFile: raw.track_file,
+}));

@@ -89,6 +89,10 @@
   cursor: pointer;
 }
 
+.filter__listItem_active {
+  color: #ad61ff;
+}
+
 .filter__listItem:hover {
   color: #d9b6ff;
 }

@@ -1,0 +1,58 @@
+ .wrapper {
+  width: 100%;
+  min-height: 100%;
+  overflow: hidden;
+  background-color: #181818;
+}
+
+.container {
+  display: flex;
+  max-width: 1920px;
+  height: 100vh;
+  margin: 0 auto;
+  position: relative;
+  background-color: #181818;
+}
+
+.main {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: 244px minmax(0, 1fr) 418px;
+  min-height: 0;
+  height: 100%;
+  width: 100%;
+}
+
+@media screen and (max-width: 1199px) {
+  .main {
+    grid-template-columns: 200px minmax(0, 1fr) 300px;
+  }
+}
+
+@media screen and (max-width: 599px) {
+  /* На мобильных .main рендерится в один вертикальный столбец и почти
+     всегда выше 100vh, поэтому .container больше не может иметь жёсткую
+     высоту 100vh — иначе плеер (position: absolute внутри .container)
+     "зависает" на границе 100vh и перекрывает контент сайдбара при
+     прокрутке ниже одного экрана. */
+  .wrapper {
+    overflow: visible;
+  }
+
+  .container {
+    height: auto;
+    min-height: 100dvh;
+  }
+
+  .main {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: 100%;
+    /* прокручивается страница целиком, а не внутренний блок */
+    overflow-y: visible;
+    /* место снизу под фиксированный плеер (Bar), чтобы он не перекрывал
+       последние элементы списка подборок */
+    padding-bottom: 160px;
+  }
+}

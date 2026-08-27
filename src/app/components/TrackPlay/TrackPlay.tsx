@@ -1,7 +1,12 @@
+'use client';
+
 import cn from 'classnames';
 import styles from './TrackPlay.module.css';
+import { useAppSelector } from '@/store/hooks';
 
 export default function TrackPlay() {
+  const currentTrack = useAppSelector((state) => state.player.currentTrack);
+
   return (
     <div className={styles.player__trackPlay}>
       <div className={styles.trackPlay__contain}>
@@ -12,12 +17,12 @@ export default function TrackPlay() {
         </div>
         <div className={styles.trackPlay__author}>
           <a className={styles.trackPlay__authorLink} href="">
-            Ты та...
+            {currentTrack ? currentTrack.title : 'Трек не выбран'}
           </a>
         </div>
         <div className={styles.trackPlay__album}>
           <a className={styles.trackPlay__albumLink} href="">
-            Баста
+            {currentTrack?.author ?? ''}
           </a>
         </div>
       </div>
