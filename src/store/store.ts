@@ -3,6 +3,7 @@ import playerReducer from './features/playerSlice';
 import authReducer from './features/authSlice';
 import tracksReducer from './features/tracksSlice';
 import selectionsReducer from './features/selectionsSlice';
+import favoritesReducer from './features/favoritesSlice';
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     auth: authReducer,
     tracks: tracksReducer,
     selections: selectionsReducer,
+    favorites: favoritesReducer,
   },
 });
 

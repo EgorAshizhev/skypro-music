@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import cn from 'classnames';
 import styles from './Filter.module.css';
 import type { Track } from '@/data/tracks';
@@ -42,24 +42,34 @@ function getUniqueGenres(tracks: Track[]): string[] {
 export default function Filter({ tracks, selected, onChange }: FilterProps) {
   const [openFilter, setOpenFilter] = useState<FilterName | null>(null);
 
-  const filters: { name: FilterName; label: string; items: (string | number)[] }[] = [
-    { name: 'author', label: 'исполнителю', items: getUniqueAuthors(tracks) },
-    { name: 'year', label: 'году выпуска', items: getUniqueYears(tracks) },
-    { name: 'genre', label: 'жанру', items: getUniqueGenres(tracks) },
-  ];
+  // Пересчитываем списки уникальных значений только когда реально меняется
+  // исходный список треков, а не на каждый ререндер (например, при
+  // открытии/закрытии выпадающего списка).
+  const filters: { name: FilterName; label: string; items: (string | number)[] }[] =
+    useMemo(
+      () => [
+        { name: 'author', label: 'исполнителю', items: getUniqueAuthors(tracks) },
+        { name: 'year', label: 'году выпуска', items: getUniqueYears(tracks) },
+        { name: 'genre', label: 'жанру', items: getUniqueGenres(tracks) },
+      ],
+      [tracks],
+    );
 
-  function handleFilterClick(name: FilterName) {
+  const handleFilterClick = useCallback((name: FilterName) => {
     setOpenFilter((prev) => (prev === name ? null : name));
-  }
+  }, []);
 
-  function toggleValue(name: FilterName, value: string | number) {
-    const current = selected[name] as (string | number)[];
-    const next = current.includes(value)
-      ? current.filter((v) => v !== value)
-      : [...current, value];
+  const toggleValue = useCallback(
+    (name: FilterName, value: string | number) => {
+      const current = selected[name] as (string | number)[];
+      const next = current.includes(value)
+        ? current.filter((v) => v !== value)
+        : [...current, value];
 
-    onChange({ ...selected, [name]: next });
-  }
+      onChange({ ...selected, [name]: next });
+    },
+    [selected, onChange],
+  );
 
   return (
     <div className={styles.centerblock__filter}>

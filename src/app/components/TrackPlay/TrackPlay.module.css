@@ -69,9 +69,18 @@
   margin-left: 26%;
 }
 
-.trackPlay__like,
-.trackPlay__dislike {
+.trackPlay__like {
   padding: 5px;
+}
+
+.trackPlay__like:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.trackPlay__like_pending {
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 .trackPlay__likeSvg {
@@ -79,15 +88,23 @@
   height: 12px;
   fill: transparent;
   stroke: #696969;
+  transition: fill 0.15s ease, stroke 0.15s ease, transform 0.15s ease;
 }
 
-.trackPlay__dislike {
-  margin-left: 28.5px;
+.trackPlay__likeSvg_liked {
+  fill: #ad61ff;
+  stroke: #ad61ff;
+  animation: trackPlayLikePulse 0.25s ease;
 }
 
-.trackPlay__dislikeSvg {
-  width: 14.34px;
-  height: 13px;
-  fill: transparent;
-  stroke: #696969;
+@keyframes trackPlayLikePulse {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.35);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
