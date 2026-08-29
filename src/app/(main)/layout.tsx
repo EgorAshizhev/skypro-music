@@ -2,6 +2,7 @@ import styles from './layout.module.css';
 import Navigation from '@/app/components/Navigation/Navigation';
 import Sidebar from '@/app/components/Sidebar/Sidebar';
 import Bar from '@/app/components/Bar/Bar';
+import Toast from '@/app/components/Toast/Toast';
 
 export default function MainLayout({
   children,
@@ -19,6 +20,7 @@ export default function MainLayout({
         <Bar />
         <footer className={styles.footer}></footer>
       </div>
+      <Toast />
     </div>
   );
 }

@@ -12,6 +12,11 @@ interface AuthState {
   user: AuthUser | null;
   accessToken: string | null;
   refreshToken: string | null;
+  // Становится true после того как StoreProvider один раз попытался
+  // восстановить сессию из localStorage — до этого нельзя решать,
+  // авторизован пользователь или нет (иначе защищённые страницы будут
+  // на мгновение редиректить залогиненных пользователей).
+  authChecked: boolean;
   loginStatus: 'idle' | 'loading' | 'failed';
   loginError: string | null;
   signupStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
@@ -22,6 +27,7 @@ const initialState: AuthState = {
   user: null,
   accessToken: null,
   refreshToken: null,
+  authChecked: false,
   loginStatus: 'idle',
   loginError: null,
   signupStatus: 'idle',
@@ -32,6 +38,10 @@ function persistAuth(user: AuthUser, accessToken: string, refreshToken: string) 
   localStorage.setItem('sm_user', JSON.stringify(user));
   localStorage.setItem('sm_access', accessToken);
   localStorage.setItem('sm_refresh', refreshToken);
+}
+
+function persistAccessToken(accessToken: string) {
+  localStorage.setItem('sm_access', accessToken);
 }
 
 export function clearPersistedAuth() {
@@ -88,10 +98,17 @@ const authSlice = createSlice({
         refreshToken: string;
       } | null>,
     ) {
+      state.authChecked = true;
       if (!action.payload) return;
       state.user = action.payload.user;
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
+    },
+    // Вызывается функцией обновления токена (withReAuth) после того как
+    // по refresh-токену был получен новый access-токен.
+    setAccessToken(state, action: PayloadAction<string>) {
+      state.accessToken = action.payload;
+      persistAccessToken(action.payload);
     },
     logout(state) {
       state.user = null;
@@ -134,5 +151,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { hydrateAuth, logout, resetSignupStatus } = authSlice.actions;
+export const { hydrateAuth, setAccessToken, logout, resetSignupStatus } =
+  authSlice.actions;
 export default authSlice.reducer;

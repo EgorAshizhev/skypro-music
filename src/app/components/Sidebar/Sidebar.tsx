@@ -2,12 +2,11 @@
 
 import { useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import styles from './Sidebar.module.css';
 import Loader from '@/app/components/Loader/Loader';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { fetchSelections } from '@/store/features/selectionsSlice';
-import { logout } from '@/store/features/authSlice';
+import { useLogout } from '@/store/useLogout';
 
 const fallbackImages = [
   '/img/playlist01.png',
@@ -17,7 +16,7 @@ const fallbackImages = [
 
 export default function Sidebar() {
   const dispatch = useAppDispatch();
-  const router = useRouter();
+  const handleLogout = useLogout();
 
   const user = useAppSelector((state) => state.auth.user);
   const { list, listStatus } = useAppSelector((state) => state.selections);
@@ -30,11 +29,6 @@ export default function Sidebar() {
       dispatch(fetchSelections());
     }
   }, [listStatus, dispatch]);
-
-  function handleLogout() {
-    dispatch(logout());
-    router.push('/signin');
-  }
 
   return (
     <div className={styles.main__sidebar}>

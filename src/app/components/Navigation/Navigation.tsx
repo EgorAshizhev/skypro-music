@@ -4,9 +4,24 @@ import { useState } from 'react';
 import Link from 'next/link';
 import cn from 'classnames';
 import styles from './Navigation.module.css';
+import { useAppSelector } from '@/store/hooks';
+import { useLogout } from '@/store/useLogout';
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const isAuthenticated = useAppSelector((state) =>
+    Boolean(state.auth.user),
+  );
+  const handleLogout = useLogout();
+
+  function closeMenu() {
+    setIsMenuOpen(false);
+  }
+
+  function handleLogoutClick() {
+    closeMenu();
+    handleLogout();
+  }
 
   return (
     <nav className={styles.main__nav}>
@@ -40,20 +55,40 @@ export default function Navigation() {
       >
         <ul className={styles.menu__list}>
           <li className={styles.menu__item}>
-            <Link href="/" className={styles.menu__link}>
+            <Link href="/" className={styles.menu__link} onClick={closeMenu}>
               Главное
             </Link>
           </li>
           <li className={styles.menu__item}>
-            <Link href="/playlist" className={styles.menu__link}>
-              Мой плейлист
+            <Link
+              href="/playlist"
+              className={styles.menu__link}
+              onClick={closeMenu}
+            >
+              Мои треки
             </Link>
           </li>
-          <li className={styles.menu__item}>
-            <Link href="/signin" className={styles.menu__link}>
-              Войти
-            </Link>
-          </li>
+          {isAuthenticated ? (
+            <li className={styles.menu__item}>
+              <button
+                type="button"
+                className={cn(styles.menu__link, styles.menu__linkBtn)}
+                onClick={handleLogoutClick}
+              >
+                Выйти
+              </button>
+            </li>
+          ) : (
+            <li className={styles.menu__item}>
+              <Link
+                href="/signin"
+                className={styles.menu__link}
+                onClick={closeMenu}
+              >
+                Войти
+              </Link>
+            </li>
+          )}
         </ul>
       </div>
     </nav>

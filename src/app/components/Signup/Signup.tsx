@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import cn from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -16,8 +16,16 @@ export default function Signup() {
 
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { signupStatus, signupError } = useAppSelector((state) => state.auth);
+  const { signupStatus, signupError, user, authChecked } = useAppSelector(
+    (state) => state.auth,
+  );
   const isLoading = signupStatus === 'loading';
+
+  useEffect(() => {
+    if (authChecked && user) {
+      router.replace('/');
+    }
+  }, [authChecked, user, router]);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -48,6 +56,10 @@ export default function Signup() {
   }
 
   const errorText = formError || signupError;
+
+  if (authChecked && user) {
+    return null;
+  }
 
   return (
     <div className={styles.wrapper}>

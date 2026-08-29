@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import cn from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -15,8 +15,19 @@ export default function Signin() {
 
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { loginStatus, loginError } = useAppSelector((state) => state.auth);
+  const { loginStatus, loginError, user, authChecked } = useAppSelector(
+    (state) => state.auth,
+  );
   const isLoading = loginStatus === 'loading';
+
+  // Если сессия уже есть (например, пользователь перешёл на /signin по
+  // старой ссылке или из истории браузера) — сразу уводим на главную,
+  // а не показываем форму входа заново.
+  useEffect(() => {
+    if (authChecked && user) {
+      router.replace('/');
+    }
+  }, [authChecked, user, router]);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -37,6 +48,10 @@ export default function Signin() {
   }
 
   const errorText = formError || loginError;
+
+  if (authChecked && user) {
+    return null;
+  }
 
   return (
     <div className={styles.wrapper}>
