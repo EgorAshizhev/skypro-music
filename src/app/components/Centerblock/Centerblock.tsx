@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './Centerblock.module.css';
 import Search from '@/app/components/Search/Search';
-import Filter, { type SelectedFilters } from '@/app/components/Filter/Filter';
+import Filter from '@/app/components/Filter/Filter';
 import Playlist from '@/app/components/Playlist/Playlist';
 import Loader from '@/app/components/Loader/Loader';
 import ErrorMessage from '@/app/components/ErrorMessage/ErrorMessage';
@@ -13,6 +13,8 @@ import { fetchAllTracks } from '@/store/features/tracksSlice';
 import { fetchSelectionTracks } from '@/store/features/selectionsSlice';
 import { fetchFavorites } from '@/store/features/favoritesSlice';
 import { setPlaylist } from '@/store/features/playerSlice';
+import { applyTrackFilters, emptyFilters } from '@/utils/trackFilters';
+import type { SelectedFilters } from '@/utils/trackFilters';
 import type { Track } from '@/data/tracks';
 
 interface CenterblockProps {
@@ -21,8 +23,6 @@ interface CenterblockProps {
   // пользователя и требует авторизации.
   favoritesOnly?: boolean;
 }
-
-const emptyFilters: SelectedFilters = { author: [], year: [], genre: [] };
 
 export default function Centerblock({
   selectionId,
@@ -37,14 +37,18 @@ export default function Centerblock({
   const { user, authChecked } = useAppSelector((state) => state.auth);
 
   const [filters, setFilters] = useState<SelectedFilters>(emptyFilters);
+  const [search, setSearch] = useState('');
 
-  // Сброс фильтров при переходе между главной и подборкой — по
-  // рекомендованному React-паттерну "adjust state during render",
+  // Сброс поиска, фильтров и сортировки при переходе между главной,
+  // подборкой и избранным — чтобы они не "гуляли" из подборки в подборку.
+  // Используем рекомендованный React-паттерн "adjust state during render",
   // а не setState внутри useEffect (вызывает лишний ререндер).
-  const [prevSelectionId, setPrevSelectionId] = useState(selectionId);
-  if (selectionId !== prevSelectionId) {
-    setPrevSelectionId(selectionId);
+  const scopeKey = favoritesOnly ? 'favorites' : (selectionId ?? 'all');
+  const [prevScopeKey, setPrevScopeKey] = useState(scopeKey);
+  if (scopeKey !== prevScopeKey) {
+    setPrevScopeKey(scopeKey);
     setFilters(emptyFilters);
+    setSearch('');
   }
 
   // Страница избранного доступна только авторизованным пользователям —
@@ -94,20 +98,10 @@ export default function Centerblock({
       ? selectionState.currentTracks
       : allTracksState.items;
 
-  const filteredTracks = useMemo(() => {
-    return sourceTracks.filter((track) => {
-      const authorOk =
-        filters.author.length === 0 ||
-        track.author
-          .split(',')
-          .some((name) => filters.author.includes(name.trim()));
-      const yearOk =
-        filters.year.length === 0 || filters.year.includes(track.year);
-      const genreOk =
-        filters.genre.length === 0 || filters.genre.includes(track.genre);
-      return authorOk && yearOk && genreOk;
-    });
-  }, [sourceTracks, filters]);
+  const filteredTracks = useMemo(
+    () => applyTrackFilters(sourceTracks, filters, search),
+    [sourceTracks, filters, search],
+  );
 
   useEffect(() => {
     dispatch(setPlaylist(filteredTracks));
@@ -125,7 +119,7 @@ export default function Centerblock({
 
   return (
     <div className={styles.centerblock}>
-      <Search />
+      <Search value={search} onChange={setSearch} />
       <h2 className={styles.centerblock__h2}>{title}</h2>
       <Filter
         tracks={sourceTracks}

@@ -4,12 +4,15 @@ import { useCallback, useMemo, useState } from 'react';
 import cn from 'classnames';
 import styles from './Filter.module.css';
 import type { Track } from '@/data/tracks';
+import {
+  getUniqueAuthors,
+  getUniqueGenres,
+  type SelectedFilters,
+  type SortOrder,
+} from '@/utils/trackFilters';
 
-export interface SelectedFilters {
-  author: string[];
-  year: number[];
-  genre: string[];
-}
+export type { SelectedFilters } from '@/utils/trackFilters';
+export { emptyFilters } from '@/utils/trackFilters';
 
 interface FilterProps {
   tracks: Track[];
@@ -17,56 +20,51 @@ interface FilterProps {
   onChange: (filters: SelectedFilters) => void;
 }
 
-type FilterName = keyof SelectedFilters;
+type FilterName = 'authors' | 'genres' | 'sort';
 
-function getUniqueAuthors(tracks: Track[]): string[] {
-  const authors = new Set<string>();
-  tracks.forEach((track) => {
-    track.author.split(',').forEach((name) => authors.add(name.trim()));
-  });
-  return Array.from(authors);
-}
-
-function getUniqueYears(tracks: Track[]): number[] {
-  const years = new Set<number>();
-  tracks.forEach((track) => years.add(track.year));
-  return Array.from(years).sort((a, b) => b - a);
-}
-
-function getUniqueGenres(tracks: Track[]): string[] {
-  const genres = new Set<string>();
-  tracks.forEach((track) => genres.add(track.genre));
-  return Array.from(genres);
-}
+const sortOptions: { value: SortOrder; label: string }[] = [
+  { value: 'default', label: 'По умолчанию' },
+  { value: 'new', label: 'Сначала новые' },
+  { value: 'old', label: 'Сначала старые' },
+];
 
 export default function Filter({ tracks, selected, onChange }: FilterProps) {
   const [openFilter, setOpenFilter] = useState<FilterName | null>(null);
 
   // Пересчитываем списки уникальных значений только когда реально меняется
-  // исходный список треков, а не на каждый ререндер (например, при
-  // открытии/закрытии выпадающего списка).
-  const filters: { name: FilterName; label: string; items: (string | number)[] }[] =
-    useMemo(
-      () => [
-        { name: 'author', label: 'исполнителю', items: getUniqueAuthors(tracks) },
-        { name: 'year', label: 'году выпуска', items: getUniqueYears(tracks) },
-        { name: 'genre', label: 'жанру', items: getUniqueGenres(tracks) },
-      ],
-      [tracks],
-    );
+  // исходный (неотфильтрованный) список треков, а не на каждый ререндер
+  // (например, при открытии/закрытии выпадающего списка).
+  const authorOptions = useMemo(() => getUniqueAuthors(tracks), [tracks]);
+  const genreOptions = useMemo(() => getUniqueGenres(tracks), [tracks]);
 
   const handleFilterClick = useCallback((name: FilterName) => {
     setOpenFilter((prev) => (prev === name ? null : name));
   }, []);
 
-  const toggleValue = useCallback(
-    (name: FilterName, value: string | number) => {
-      const current = selected[name] as (string | number)[];
-      const next = current.includes(value)
-        ? current.filter((v) => v !== value)
-        : [...current, value];
+  const toggleAuthor = useCallback(
+    (value: string) => {
+      const next = selected.authors.includes(value)
+        ? selected.authors.filter((v) => v !== value)
+        : [...selected.authors, value];
+      onChange({ ...selected, authors: next });
+    },
+    [selected, onChange],
+  );
 
-      onChange({ ...selected, [name]: next });
+  const toggleGenre = useCallback(
+    (value: string) => {
+      const next = selected.genres.includes(value)
+        ? selected.genres.filter((v) => v !== value)
+        : [...selected.genres, value];
+      onChange({ ...selected, genres: next });
+    },
+    [selected, onChange],
+  );
+
+  const chooseSort = useCallback(
+    (value: SortOrder) => {
+      onChange({ ...selected, sort: value });
+      setOpenFilter(null);
     },
     [selected, onChange],
   );
@@ -74,39 +72,89 @@ export default function Filter({ tracks, selected, onChange }: FilterProps) {
   return (
     <div className={styles.centerblock__filter}>
       <div className={styles.filter__title}>Искать по:</div>
-      {filters.map((filter) => {
-        const activeCount = selected[filter.name].length;
-        return (
-          <div key={filter.name} className={styles.filter__wrapper}>
-            <div
-              className={cn(styles.filter__button, 'btn-text', {
-                [styles.active]: openFilter === filter.name || activeCount > 0,
-              })}
-              onClick={() => handleFilterClick(filter.name)}
-            >
-              {filter.label}
-              {activeCount > 0 ? ` (${activeCount})` : ''}
-            </div>
-            {openFilter === filter.name && (
-              <ul className={styles.filter__list}>
-                {filter.items.map((item) => (
-                  <li
-                    key={item}
-                    className={cn(styles.filter__listItem, {
-                      [styles.filter__listItem_active]: (
-                        selected[filter.name] as (string | number)[]
-                      ).includes(item),
-                    })}
-                    onClick={() => toggleValue(filter.name, item)}
-                  >
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        );
-      })}
+
+      <div className={styles.filter__wrapper}>
+        <div
+          className={cn(styles.filter__button, 'btn-text', {
+            [styles.active]: openFilter === 'authors' || selected.authors.length > 0,
+          })}
+          onClick={() => handleFilterClick('authors')}
+        >
+          исполнителю
+          {selected.authors.length > 0 ? ` (${selected.authors.length})` : ''}
+        </div>
+        {openFilter === 'authors' && (
+          <ul className={styles.filter__list}>
+            {authorOptions.map((author) => (
+              <li
+                key={author}
+                className={cn(styles.filter__listItem, {
+                  [styles.filter__listItem_active]:
+                    selected.authors.includes(author),
+                })}
+                onClick={() => toggleAuthor(author)}
+              >
+                {author}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <div className={styles.filter__wrapper}>
+        <div
+          className={cn(styles.filter__button, 'btn-text', {
+            [styles.active]: openFilter === 'sort' || selected.sort !== 'default',
+          })}
+          onClick={() => handleFilterClick('sort')}
+        >
+          году выпуска
+        </div>
+        {openFilter === 'sort' && (
+          <ul className={styles.filter__list}>
+            {sortOptions.map((option) => (
+              <li
+                key={option.value}
+                className={cn(styles.filter__listItem, {
+                  [styles.filter__listItem_active]:
+                    selected.sort === option.value,
+                })}
+                onClick={() => chooseSort(option.value)}
+              >
+                {option.label}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <div className={styles.filter__wrapper}>
+        <div
+          className={cn(styles.filter__button, 'btn-text', {
+            [styles.active]: openFilter === 'genres' || selected.genres.length > 0,
+          })}
+          onClick={() => handleFilterClick('genres')}
+        >
+          жанру
+          {selected.genres.length > 0 ? ` (${selected.genres.length})` : ''}
+        </div>
+        {openFilter === 'genres' && (
+          <ul className={styles.filter__list}>
+            {genreOptions.map((genre) => (
+              <li
+                key={genre}
+                className={cn(styles.filter__listItem, {
+                  [styles.filter__listItem_active]:
+                    selected.genres.includes(genre),
+                })}
+                onClick={() => toggleGenre(genre)}
+              >
+                {genre}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 }
