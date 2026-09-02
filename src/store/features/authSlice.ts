@@ -1,4 +1,8 @@
-import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import {
+  createAsyncThunk,
+  createSlice,
+  type PayloadAction,
+} from '@reduxjs/toolkit';
 import { login, signup, getToken } from '@/services/authApi';
 import { ApiError } from '@/services/httpClient';
 
@@ -34,7 +38,11 @@ const initialState: AuthState = {
   signupError: null,
 };
 
-function persistAuth(user: AuthUser, accessToken: string, refreshToken: string) {
+function persistAuth(
+  user: AuthUser,
+  accessToken: string,
+  refreshToken: string,
+) {
   localStorage.setItem('sm_user', JSON.stringify(user));
   localStorage.setItem('sm_access', accessToken);
   localStorage.setItem('sm_refresh', refreshToken);

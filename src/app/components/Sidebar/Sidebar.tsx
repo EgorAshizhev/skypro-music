@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import styles from './Sidebar.module.css';
 import Loader from '@/app/components/Loader/Loader';
@@ -65,7 +66,7 @@ export default function Sidebar() {
                   className={styles.sidebar__link}
                   href={`/selection/${selection.id}`}
                 >
-                  <img
+                  <Image
                     className={styles.sidebar__img}
                     src={fallbackImages[index % fallbackImages.length]}
                     alt={selection.name ?? 'Подборка'}

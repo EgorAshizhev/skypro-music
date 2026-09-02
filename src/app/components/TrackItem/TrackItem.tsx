@@ -54,10 +54,7 @@ export default function TrackItem({ track }: TrackItemProps) {
 
   return (
     <div className={styles.playlist__item}>
-      <div
-        className={cn(styles.playlist__track, 'btn')}
-        onClick={handleClick}
-      >
+      <div className={cn(styles.playlist__track, 'btn')} onClick={handleClick}>
         <div className={styles.track__title}>
           <div className={styles.track__titleImage}>
             {isCurrent ? (

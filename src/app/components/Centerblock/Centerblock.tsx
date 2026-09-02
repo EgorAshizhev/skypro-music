@@ -121,11 +121,7 @@ export default function Centerblock({
     <div className={styles.centerblock}>
       <Search value={search} onChange={setSearch} />
       <h2 className={styles.centerblock__h2}>{title}</h2>
-      <Filter
-        tracks={sourceTracks}
-        selected={filters}
-        onChange={setFilters}
-      />
+      <Filter tracks={sourceTracks} selected={filters} onChange={setFilters} />
       <div className={styles.centerblock__playlistWrapper}>
         {(status === 'loading' || status === 'idle') && (
           <Loader text="Загрузка треков" />

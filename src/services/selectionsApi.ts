@@ -27,7 +27,9 @@ function normalizeSelection(raw: RawSelection): Selection {
     const id =
       typeof rawId === 'number'
         ? rawId
-        : typeof rawId === 'string' && rawId.trim() !== '' && !Number.isNaN(Number(rawId))
+        : typeof rawId === 'string' &&
+            rawId.trim() !== '' &&
+            !Number.isNaN(Number(rawId))
           ? Number(rawId)
           : null;
 

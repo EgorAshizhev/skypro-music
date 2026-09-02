@@ -1,9 +1,5 @@
 import { apiRequest } from './httpClient';
-import type {
-  LoginResponse,
-  SignupResponse,
-  TokenResponse,
-} from '@/types/api';
+import type { LoginResponse, SignupResponse, TokenResponse } from '@/types/api';
 
 export function signup(
   email: string,
@@ -16,10 +12,7 @@ export function signup(
   });
 }
 
-export function login(
-  email: string,
-  password: string,
-): Promise<LoginResponse> {
+export function login(email: string, password: string): Promise<LoginResponse> {
   return apiRequest<LoginResponse>('/user/login/', {
     method: 'POST',
     body: JSON.stringify({ email, password }),

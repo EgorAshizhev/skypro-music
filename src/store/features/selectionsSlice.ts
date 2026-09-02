@@ -1,6 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { Track } from '@/data/tracks';
-import { getAllSelections, getSelectionById, type Selection } from '@/services/selectionsApi';
+import {
+  getAllSelections,
+  getSelectionById,
+  type Selection,
+} from '@/services/selectionsApi';
 import { getAllTracks } from '@/services/tracksApi';
 import { ApiError } from '@/services/httpClient';
 
@@ -83,7 +87,8 @@ const selectionsSlice = createSlice({
       })
       .addCase(fetchSelections.rejected, (state, action) => {
         state.listStatus = 'failed';
-        state.listError = action.payload ?? 'Произошла ошибка. Попробуйте позже';
+        state.listError =
+          action.payload ?? 'Произошла ошибка. Попробуйте позже';
       })
       .addCase(fetchSelectionTracks.pending, (state) => {
         state.currentStatus = 'loading';
@@ -100,7 +105,8 @@ const selectionsSlice = createSlice({
       })
       .addCase(fetchSelectionTracks.rejected, (state, action) => {
         state.currentStatus = 'failed';
-        state.currentError = action.payload ?? 'Произошла ошибка. Попробуйте позже';
+        state.currentError =
+          action.payload ?? 'Произошла ошибка. Попробуйте позже';
       });
   },
 });

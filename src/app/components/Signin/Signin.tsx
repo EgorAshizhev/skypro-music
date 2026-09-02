@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type FormEvent } from 'react';
 import cn from 'classnames';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import styles from './Signin.module.css';
@@ -59,7 +60,12 @@ export default function Signin() {
         <div className={styles.modal__block}>
           <form className={styles.modal__form} onSubmit={handleSubmit}>
             <Link href="/" className={styles.modal__logo}>
-              <img src="/img/logo_modal.png" alt="logo" />
+              <Image
+                src="/img/logo_modal.png"
+                alt="logo"
+                width={140}
+                height={21}
+              />
             </Link>
             <input
               className={cn(styles.modal__input, styles.login)}

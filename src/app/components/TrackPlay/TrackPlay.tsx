@@ -59,9 +59,7 @@ export default function TrackPlay() {
           })}
           onClick={handleLikeClick}
           disabled={!currentTrack}
-          aria-label={
-            isLiked ? 'Убрать из избранного' : 'Добавить в избранное'
-          }
+          aria-label={isLiked ? 'Убрать из избранного' : 'Добавить в избранное'}
           aria-pressed={isLiked}
         >
           <svg

@@ -38,7 +38,6 @@ export default function Bar() {
     audio.play().catch(() => {});
   }, [currentTrack]);
 
-
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio || !currentTrack) return;
@@ -49,13 +48,11 @@ export default function Bar() {
     }
   }, [isPlaying, currentTrack]);
 
-
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume;
     }
   }, [volume]);
-
 
   function handleEnded() {
     const audio = audioRef.current;
@@ -83,9 +80,7 @@ export default function Bar() {
         ref={audioRef}
         style={{ display: 'none' }}
         onEnded={handleEnded}
-        onTimeUpdate={(e) =>
-          dispatch(setProgress(e.currentTarget.currentTime))
-        }
+        onTimeUpdate={(e) => dispatch(setProgress(e.currentTarget.currentTime))}
         onLoadedMetadata={(e) =>
           dispatch(setDuration(e.currentTarget.duration))
         }
