@@ -108,7 +108,10 @@
   height: 12px;
   fill: transparent;
   stroke: #696969;
-  transition: fill 0.15s ease, stroke 0.15s ease, transform 0.15s ease;
+  transition:
+    fill 0.15s ease,
+    stroke 0.15s ease,
+    transform 0.15s ease;
 }
 
 .track__timeSvg_liked {

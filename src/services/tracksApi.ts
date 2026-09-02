@@ -51,7 +51,7 @@ export async function getTrackById(id: number): Promise<Track> {
   const payload = await apiRequest<unknown>(`/catalog/track/${id}/`);
   const raw =
     payload && typeof payload === 'object' && 'data' in payload
-      ? ((payload as { data: RawTrack }).data)
+      ? (payload as { data: RawTrack }).data
       : (payload as RawTrack);
   return normalizeTrack(raw);
 }
@@ -71,10 +71,7 @@ export function addFavoriteTrack(id: number, token: string): Promise<void> {
   });
 }
 
-export function removeFavoriteTrack(
-  id: number,
-  token: string,
-): Promise<void> {
+export function removeFavoriteTrack(id: number, token: string): Promise<void> {
   return apiRequest<void>(`/catalog/track/${id}/favorite/`, {
     method: 'DELETE',
     token,

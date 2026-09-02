@@ -13,9 +13,7 @@ export default function Playlist({ tracks }: PlaylistProps) {
   return (
     <div className={styles.centerblock__content}>
       <div className={styles.content__title}>
-        <div className={cn(styles.playlistTitle__col, styles.col01)}>
-          Трек
-        </div>
+        <div className={cn(styles.playlistTitle__col, styles.col01)}>Трек</div>
         <div className={cn(styles.playlistTitle__col, styles.col02)}>
           Исполнитель
         </div>

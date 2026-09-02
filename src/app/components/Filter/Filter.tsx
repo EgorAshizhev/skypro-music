@@ -76,7 +76,8 @@ export default function Filter({ tracks, selected, onChange }: FilterProps) {
       <div className={styles.filter__wrapper}>
         <div
           className={cn(styles.filter__button, 'btn-text', {
-            [styles.active]: openFilter === 'authors' || selected.authors.length > 0,
+            [styles.active]:
+              openFilter === 'authors' || selected.authors.length > 0,
           })}
           onClick={() => handleFilterClick('authors')}
         >
@@ -104,7 +105,8 @@ export default function Filter({ tracks, selected, onChange }: FilterProps) {
       <div className={styles.filter__wrapper}>
         <div
           className={cn(styles.filter__button, 'btn-text', {
-            [styles.active]: openFilter === 'sort' || selected.sort !== 'default',
+            [styles.active]:
+              openFilter === 'sort' || selected.sort !== 'default',
           })}
           onClick={() => handleFilterClick('sort')}
         >
@@ -131,7 +133,8 @@ export default function Filter({ tracks, selected, onChange }: FilterProps) {
       <div className={styles.filter__wrapper}>
         <div
           className={cn(styles.filter__button, 'btn-text', {
-            [styles.active]: openFilter === 'genres' || selected.genres.length > 0,
+            [styles.active]:
+              openFilter === 'genres' || selected.genres.length > 0,
           })}
           onClick={() => handleFilterClick('genres')}
         >

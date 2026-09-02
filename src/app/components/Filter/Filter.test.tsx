@@ -39,7 +39,9 @@ describe('Filter', () => {
   it('toggles an author into the selection (multi-select)', async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<Filter tracks={tracks} selected={emptyFilters} onChange={onChange} />);
+    render(
+      <Filter tracks={tracks} selected={emptyFilters} onChange={onChange} />,
+    );
 
     await user.click(screen.getByText('исполнителю'));
     await user.click(screen.getByText('Nero'));
@@ -70,7 +72,9 @@ describe('Filter', () => {
   it('applies a single sort order when a year option is chosen and closes the dropdown', async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<Filter tracks={tracks} selected={emptyFilters} onChange={onChange} />);
+    render(
+      <Filter tracks={tracks} selected={emptyFilters} onChange={onChange} />,
+    );
 
     await user.click(screen.getByText('году выпуска'));
     await user.click(screen.getByText('Сначала новые'));
@@ -82,11 +86,16 @@ describe('Filter', () => {
   it('toggles a genre into the selection (multi-select)', async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<Filter tracks={tracks} selected={emptyFilters} onChange={onChange} />);
+    render(
+      <Filter tracks={tracks} selected={emptyFilters} onChange={onChange} />,
+    );
 
     await user.click(screen.getByText('жанру'));
     await user.click(screen.getByText('Инди'));
 
-    expect(onChange).toHaveBeenCalledWith({ ...emptyFilters, genres: ['Инди'] });
+    expect(onChange).toHaveBeenCalledWith({
+      ...emptyFilters,
+      genres: ['Инди'],
+    });
   });
 });

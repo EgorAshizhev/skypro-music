@@ -58,7 +58,7 @@
     height: 100%;
     overflow: hidden;
   }
-  
+
   .centerblock__playlistWrapper :global(.content__playlist) {
     overflow-y: auto !important;
   }
@@ -71,11 +71,11 @@
     height: auto;
     overflow: visible;
   }
-  
+
   .centerblock__playlistWrapper {
     overflow: visible;
   }
-  
+
   .centerblock__playlistWrapper :global(.content__playlist) {
     overflow-y: visible !important;
     max-height: none;

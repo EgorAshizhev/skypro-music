@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import cn from 'classnames';
 import styles from './Navigation.module.css';
@@ -9,9 +10,7 @@ import { useLogout } from '@/store/useLogout';
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const isAuthenticated = useAppSelector((state) =>
-    Boolean(state.auth.user),
-  );
+  const isAuthenticated = useAppSelector((state) => Boolean(state.auth.user));
   const handleLogout = useLogout();
 
   function closeMenu() {
@@ -27,8 +26,7 @@ export default function Navigation() {
     <nav className={styles.main__nav}>
       <div className={styles.nav__logo}>
         <Link href="/">
-          {/*TODO: img -> Image*/}
-          <img
+          <Image
             width={250}
             height={170}
             className={styles.logo__image}
