@@ -30,7 +30,7 @@ export default function Playlist({ tracks }: PlaylistProps) {
       </div>
       <div className={styles.content__playlist}>
         {tracks.length === 0 ? (
-          <div className={styles.emptyState}>Треки не найдены</div>
+          <div className={styles.emptyState}>Нет подходящих треков</div>
         ) : (
           tracks.map((track) => <TrackItem key={track.id} track={track} />)
         )}
